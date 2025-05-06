@@ -1,0 +1,67 @@
+// /**
+//   1. Kp (Proportional Gain, 비례 게인)
+//     정의: 비례 게인(Kp)은 현재 오차에 비례하여 출력값을 결정하는 요소입니다.
+//     작동 원리: 오차(목표값과 현재값의 차이)가 클수록 더 큰 출력이 생성됩니다. Kp는 이 오차에 얼마나 강하게 반응할지를 결정합니다. 예를 들어, Kp 값이 클수록 시스템이 더 빠르게 반응하지만, 오버슈트(목표값을 초과하는 현상)가 발생할 가능성이 높습니다.
+//     효과:
+//     Kp가 너무 낮을 경우: 반응이 너무 느려서 목표값에 도달하는 데 오랜 시간이 걸립니다.
+//     Kp가 너무 클 경우: 시스템이 과도하게 반응하여 목표값을 넘어서거나, 진동하면서 불안정해질 수 있습니다.
+//   2. Ki (Integral Gain, 적분 게인)
+//     정의: 적분 게인(Ki)은 오차의 누적에 비례하여 출력값을 조정하는 요소입니다.
+//     작동 원리: 시간이 지남에 따라 오차가 누적되면, Ki가 그 누적된 오차를 보정하려고 출력값을 증가시킵니다. 이는 **잔여 오차(steady-state error)**를 제거하는 데 유용합니다. Ki는 장기적인 오차를 줄이기 위해 동작합니다.
+//     효과:
+//     Ki가 너무 낮을 경우: 시스템이 목표값에 도달하지 못하고, 목표값 근처에서 일정한 오차가 계속 남을 수 있습니다.
+//     Ki가 너무 클 경우: 적분 누적이 너무 빠르게 이루어져서 시스템이 과도하게 반응하거나 진동하게 될 수 있습니다.
+//   3. Kd (Derivative Gain, 미분 게인)
+//     정의: 미분 게인(Kd)은 오차의 변화율(즉, 오차가 얼마나 빠르게 변하는지)에 비례하여 출력값을 조정하는 요소입니다.
+//     작동 원리: Kd는 오차의 변화가 급격할 때 이를 억제하려는 역할을 합니다. 이는 과도 현상이나 진동을 줄이는 데 도움을 줍니다. Kd는 시스템의 반응 속도를 안정화시키는 데 중요한 역할을 합니다.
+//     효과:
+//     Kd가 너무 낮을 경우: 과도 현상이나 진동이 발생할 수 있습니다.
+//     Kd가 너무 클 경우: 시스템이 지나치게 천천히 반응할 수 있습니다.
+//     PID 게인의 조합 효과
+//     Kp: 빠른 반응을 제공합니다. 너무 크면 불안정해질 수 있습니다.
+//     Ki: 장기적인 오차를 보정합니다. 너무 크면 진동을 유발할 수 있습니다.
+//     Kd: 과도 현상과 진동을 억제합니다. 너무 크면 시스템이 느려질 수 있습니다.
+// */
+// #include <Arduino.h>
+// #include <PID_v1.h>
+
+// const int ANALOG_PIN = 4;   // 아날로그 입력 핀
+// const int SWITCH_PIN = 18;  // 스위치 입력 핀
+// const int PWM_PIN = 19;     // PWM 출력 핀
+
+
+// double targetPWM, currentPWM, pidOutput;
+
+// double Kp = 1.2, Ki = 2, Kd = 1.5;
+// PID myPID(&currentPWM, &pidOutput, &targetPWM, Kp, Ki, Kd, DIRECT);
+
+
+// void setup() {
+//   Serial.begin(115200);
+//   pinMode(SWITCH_PIN, INPUT_PULLUP);
+
+//   // PID 제어 설정
+//   myPID.SetMode(AUTOMATIC);
+//   myPID.SetOutputLimits(0, 4095);  // PID 출력값을 0에서 255로 제한
+
+// }
+
+// void loop() {
+//   // 아날로그 입력 읽기 (0~3.3V)
+//   int analogValue = analogRead(ANALOG_PIN);
+//   currentPWM = (double)analogValue / 4095.0 * 255.0;
+
+//   Serial.print("입력 PWM: ");
+//   Serial.println(currentPWM);
+
+//   targetPWM = 200;
+//   Serial.print("목표 PWM: ");
+//   Serial.println(targetPWM);
+
+//   myPID.Compute();
+
+//   Serial.print("설정 PWM: ");
+//   Serial.println(pidOutput);
+
+//   delay(1000);
+// }
