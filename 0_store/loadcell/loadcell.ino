@@ -57,4 +57,5 @@ void loop() {
     calibration_count = 0;  // 조건 불만족 시 카운트 초기화
   }
   previous_weight = weight;  // 이전 무게 값 업데이트
+  sendWeightMQTT(weight);
 }

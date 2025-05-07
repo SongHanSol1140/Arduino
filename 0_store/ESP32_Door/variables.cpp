@@ -13,11 +13,11 @@ IPAddress subnet(255, 255, 255, 0);    // 서브넷 마스크
 IPAddress dns(192, 168, 0, 1);
 
 // MQTT
-char mqttClientName[] = "DoorSystem_ESP32";
+char mqttClientName[] = "DoorModule";
 char mqttUserName[] = "nanonix";           // 아이디
 char mqttPassword[] = "$@43nanonix";       // 패스워드
-char serverTopic[] = "DoorServer";;
-char moduleTopic[] = "DoorModule";;
+char serverTopic[] = "DoorServer";
+char moduleTopic[] = "DoorModule";
 IPAddress mqttAddress(192, 168, 0, 230);  // MQTT 브로커 IP. 포트는 미기입시 자동 1883
 
 // TCP PORT

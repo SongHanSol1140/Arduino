@@ -19,9 +19,12 @@ extern char mqttUserName[];   // mqtt 유저명
 extern char mqttPassword[];   // mqtt 패스워드명
 extern char topic[];
 extern IPAddress mqttAddress; // MQTT 브로커의 IP 주소
-
+extern char publish
 extern char subscribeTopic[];
 
 
-extern int TELEPHONE_PIN;
+extern int TELEPHONE_PIN1;
+extern int TELEPHONE_PIN2;
+extern int TX_PIN;
+extern int RX_PIN;
 #endif // VARIABLES_H

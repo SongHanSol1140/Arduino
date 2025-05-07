@@ -5,7 +5,7 @@
 #include <ArduinoJson.h>
 #include <WiFi.h>
 #include <MQTT.h>
-
+extern WiFiClient net;
 extern MQTTClient mqttClient;
 
 void setWifi();

@@ -10,8 +10,8 @@ IPAddress subnet(255, 255, 255, 0);    // 서브넷 마스크
 IPAddress dns(192, 168, 0, 1);
 // Centrex
 const char *centrexHost = "centrex.uplus.co.kr";
-const char *centrex_id = "07040994350";
-const char *centrex_raw_password = "6195nix!!";
+const char *centrex_id = "00000000000";
+const char *centrex_raw_password = "00000000";
 const char *msg = "주문링크\r\nhttps://nanonix.help";
 
 

@@ -1,4 +1,22 @@
 #include "variables.h"
+
+// 와이파이
+char wifi_ssid[] = "NNX2-2.4G";
+char wifi_password[] = "$@43skshslrtm";
+IPAddress wifiIP(192, 168, 0, 251);  // 접속할 고정 IP 주소
+IPAddress gateway(192, 168, 0, 1);     // 게이트웨이 주소
+IPAddress subnet(255, 255, 255, 0);    // 서브넷 마스크
+IPAddress dns(192, 168, 0, 1);
+// MQTT
+char mqttClientName[] = "LoadcellModule";
+char mqttUserName[] = "nanonix"; // 아이디
+char mqttPassword[] = "$@43nanonix"; // 패스워드
+char publishTopic[] = "LoadcellServer";
+char subscribeTopic[] = "LoadcellModule";
+IPAddress mqttAddress(192, 168, 0, 230);  // MQTT 브로커 IP. 포트는 미기입시 자동 1883
+
+
+
 // HX711 객체 정의
 HX711 scale(DOUT_PIN, CLK_PIN, 128);
 
@@ -20,16 +38,6 @@ long sumOfValues = 0;
 int average = 0;
 float weight = 0.0;
 float previous_weight = 0.0;
-// Wi-Fi 정보
-char wifi_ssid[] = "NNX2-2.4G";
-char wifi_password[] = "$@43skshslrtm";
-
-// MQTT
-char mqttClientName[] = "DoorSystem";
-char mqttUserName[] = "nanonix"; // 아이디
-char mqttPassword[] = "$@43nanonix"; // 패스워드
-char publishTopic[] = "LoadCellServer";
-char subscribeTopic[] = "LoadCell";
 
 // 기타 변수
 int weightCount = 0;

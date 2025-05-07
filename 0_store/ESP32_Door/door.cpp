@@ -4,12 +4,12 @@
 #include "max98357.h"
 
 void setOpenTime() {
-  Serial.println("getDoorTimeConfig");
+  Serial.println("GetDoorTimeConfig");
   mqttClient.publish(serverTopic, "getDoorTimeConfig");
 }
 
 void OpenDoor() {
-  Serial.println("Entering door opening wait state...");
+  // Serial.println("Entering door opening wait state...");
   doorWaitingForOpen = true;     // 개방 대기 상태로 전환
   doorWaitStartTime = millis();  // 개방 대기 시작 시간 기록
   doorIsOpen = false;
@@ -17,11 +17,29 @@ void OpenDoor() {
 }
 
 void closeDoor() {
-  Serial.println("Door is closing...");
+  // Serial.println("Door is closing...");
   digitalWrite(DOOR_PIN, LOW);  // 문 닫힘 (DOOR_PIN OFF)
   doorIsOpen = false;
   doorIsClosing = true;
   doorClosingStartTime = millis();  // 문이 닫히기 시작한 시간 기록
+}
+
+// EmergencyButton 이전 버튼 상태 저장 변수
+static int prevEmergencyButtonState = HIGH;
+void checkEmergencyButton() {
+  // 현재 버튼 상태 읽기
+  int currState = digitalRead(Emergency_BUTTON_PIN);
+
+  // 버튼이 눌렸다가 놓이는 순간 (HIGH -> LOW) 한번만 감지
+  if (currState == LOW && prevEmergencyButtonState == HIGH) {
+    mqttClient.publish(serverTopic, "PressEmergencyButton");
+  }
+
+  // 이전 상태 업데이트
+  prevEmergencyButtonState = currState;
+  
+  // 디바운싱
+  delay(10);
 }
 
 void checkSensors() {
@@ -40,7 +58,7 @@ void checkSensors() {
     // 개방 대기 상태에서 센서 감지 시 문 열기
     if (entrySensorState == HIGH || exitSensorState == HIGH) {
 
-      
+
       Serial.println("대기 중 센서가 감지되었습니다. 문 개방.");
       digitalWrite(DOOR_PIN, HIGH);  // 문 개방
       doorOpenTime = currentTime;
@@ -84,12 +102,5 @@ void checkSensors() {
       doorOpenTime = currentTime;
       doorIsOpen = true;
     }
-  }
-}
-
-void checkEmergencyButton() {
-  if (digitalRead(Emergency_BUTTON_PIN) == LOW) {
-    Serial.println("문의 비상 호출버튼이 눌림");
-    mqttClient.publish(serverTopic, String("DoorButtonPress/") + branchCode);
   }
 }

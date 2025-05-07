@@ -1,20 +1,19 @@
 // wifi_mqtt.cpp
 #include "wifi_mqtt.h"
 #include "variables.h"
+#include "door.h"
+#include "max98357.h"
 
-IPAddress address(192, 168, 0, 254);
 WiFiClient net;
-MQTTClient client(1024, 1024);
+MQTTClient mqttClient(1024, 1024);
 
 void setWifi() {
   if (WiFi.status() != WL_CONNECTED) {
-    
-    
     // 미사용시 주석처리
     // 고정 IP 설정
     if (!WiFi.config(wifiIP, gateway, subnet, dns)) {
       Serial.println("STA Failed to configure");
-    } 
+    }
     // 고정IP 설정 끝
 
     WiFi.begin(wifi_ssid, wifi_password);
@@ -30,18 +29,21 @@ void setWifi() {
 
 
 void setMqtt() {
-  if (!client.connected()) {
-    client.begin(mqttAddress, net);
-    while (!client.connect(mqttClientName, mqttUserName, mqttPassword)) {
+  if (!mqttClient.connected()) {
+    mqttClient.begin(mqttAddress, net);
+    while (!mqttClient.connect(mqttClientName, mqttUserName, mqttPassword)) {
       // while (!client.connect(mqttClientName)) {
       Serial.println("MQTT connecting...");
       delay(1000);
     }
     Serial.println("MQTT connected!");
-    client.subscribe(topic);
-    client.onMessage(messageReceived);
+    mqttClient.subscribe(moduleTopic);
+    mqttClient.onMessage(messageReceived);
   }
 }
+
+
+
 
 
 
@@ -60,15 +62,32 @@ String Split(String data, char separator, int index) {
   return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
 
-void messageReceived(String &topic, String &payload) {
-  // Serial.println("incoming: " + topic + " - " + payload);
+void messageReceived(String &topicName, String &payload) {
+  Serial.println("incoming: " + topicName + " - " + payload);
 
   String first = Split(payload, '/', 0);
   String second = Split(payload, '/', 1);
-    if (first == "cancleCall") {
-      Serial.println("cancleCall");
-      digitalWrite(TELEPHONE_PIN1, LOW);
-      delay(500);  // 0.5초 동안 대기
-      digitalWrite(TELEPHONE_PIN1, HIGH);
+
+  if (first == "openTime") {
+    Serial.println("set optenTime");
+    Serial.print(first);
+    Serial.print(":");
+    Serial.println(second);
+
+    openTime = second.toInt();  // String 값을 int로 변환
+  }
+  if (first == "waitForOpenTime") {
+    Serial.println("set waitForOpenTime");
+    Serial.print(first);
+    Serial.print(":");
+    Serial.println(second);
+    waitForOpenTime = second.toInt();  // String 값을 int로 변환
+  }
+
+  // 문 개방 명령
+  if (first == "Open") {
+    Serial.println("OpenDoor command received");
+    playWavNonBlocking("dingdong.wav");  // max98357
+    OpenDoor();                          // OpenDoor 함수 호출하여 문 개방
   }
 }

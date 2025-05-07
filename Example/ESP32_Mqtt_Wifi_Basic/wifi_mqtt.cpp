@@ -11,7 +11,7 @@ void setWifi() {
     
     // 미사용시 주석처리
     // 고정 IP 설정
-    // if (!WiFi.config(wifiIP, gateway, subnet, dns)) {
+    // if (!WiFi.config(wifiIP, gateway, subnet)) {
     //   Serial.println("STA Failed to configure");
     // } 
     // 고정IP 설정 끝
@@ -37,14 +37,10 @@ void setMqtt() {
       delay(1000);
     }
     Serial.println("MQTT connected!");
-    mqttClient.subscribe(topic);
+    mqttClient.subscribe(moduleTopic);
     mqttClient.onMessage(messageReceived);
   }
 }
-
-
-
-
 
 
 String Split(String data, char separator, int index) {
@@ -67,4 +63,9 @@ void messageReceived(String &topic, String &payload) {
 
   String first = Split(payload, '/', 0);
   String second = Split(payload, '/', 1);
+}
+
+
+void publishMessage(const String &message){
+  mqttClient.publish(serverTopic, message);
 }

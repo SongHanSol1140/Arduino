@@ -1,9 +1,9 @@
 // wifi_mqtt.cpp
 #include "wifi_mqtt.h"
 #include "variables.h"
-
 WiFiClient net;
-MQTTClient client(1024, 1024);
+MQTTClient mqttClient(1024, 1024);
+
 
 void setWifi() {
   if (WiFi.status() != WL_CONNECTED) {
@@ -11,9 +11,9 @@ void setWifi() {
     
     // 미사용시 주석처리
     // 고정 IP 설정
-    // if (!WiFi.config(wifiIP, gateway, subnet)) {
-    //   Serial.println("STA Failed to configure");
-    // } 
+    if (!WiFi.config(wifiIP, gateway, subnet, dns)) {
+      Serial.println("STA Failed to configure");
+    } 
     // 고정IP 설정 끝
 
     WiFi.begin(wifi_ssid, wifi_password);
@@ -29,21 +29,18 @@ void setWifi() {
 
 
 void setMqtt() {
-  if (!client.connected()) {
-    client.begin(mqttAddress, net);
-    while (!client.connect(mqttClientName, mqttUserName, mqttPassword)) {
-      // while (!client.connect(mqttClientName)) {
+  if (!mqttClient.connected()) {
+    mqttClient.begin(mqttAddress, net);
+    while (!mqttClient.connect(mqttClientName, mqttUserName, mqttPassword)) {
+      // while (!mqttClient.connect(mqttClientName)) {
       Serial.println("MQTT connecting...");
       delay(1000);
     }
     Serial.println("MQTT connected!");
-    client.subscribe(topic);
-    client.onMessage(messageReceived);
+    mqttClient.subscribe(moduleTopic);
+    mqttClient.onMessage(messageReceived);
   }
 }
-
-
-
 
 
 
@@ -63,8 +60,17 @@ String Split(String data, char separator, int index) {
 }
 
 void messageReceived(String &topic, String &payload) {
-  Serial.println("incoming: " + topic + " - " + payload);
+  // Serial.println("incoming: " + topic + " - " + payload);
 
   String first = Split(payload, '/', 0);
   String second = Split(payload, '/', 1);
+    if (first == "Start") {
+      Serial.println("Start");
+      cleaningbotRuningState = true;
+  }
+}
+
+
+void publishMessage(const String &message){
+  mqttClient.publish(serverTopic, message);
 }

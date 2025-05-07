@@ -1,7 +1,6 @@
 // wifi_mqtt.cpp
 #include "wifi_mqtt.h"
 #include "variables.h"
-WebServer httpServer(80);
 
 IPAddress address(192, 168, 0, 254);
 WiFiClient net;
@@ -68,19 +67,8 @@ void messageReceived(String &topic, String &payload) {
   String second = Split(payload, '/', 1);
     if (first == "cancleCall") {
       Serial.println("cancleCall");
-      digitalWrite(TELEPHONE_PIN, LOW);
+      digitalWrite(TELEPHONE_PIN1, LOW);
       delay(500);  // 0.5초 동안 대기
-      digitalWrite(TELEPHONE_PIN, HIGH);
+      digitalWrite(TELEPHONE_PIN1, HIGH);
   }
-}
-
-void handleCallCancel() {
-  // 수화기 올렸다 내리는 동작
-  Serial.println("요청확인");
-  digitalWrite(TELEPHONE_PIN, LOW);
-  delay(500);
-  digitalWrite(TELEPHONE_PIN, HIGH);
-
-  // 클라이언트에 응답
-  httpServer.send(200, "text/plain", "callCancel received");
 }

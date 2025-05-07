@@ -4,6 +4,24 @@
 #include <Arduino.h>
 #include "HX711.h"
 
+// 와이파이 정보
+extern char wifi_ssid[];
+extern char wifi_password[];
+extern IPAddress wifiIP;    // 고정 IP 주소
+extern IPAddress gateway;   // 게이트웨이 주소
+extern IPAddress subnet;    // 서브넷 마스크
+extern IPAddress dns;    // 서브넷 마스크
+
+
+// MQTT 정보
+extern char mqttClientName[]; // MQTT 접속 클라이언트 이름
+extern char mqttUserName[];   // mqtt 유저명
+extern char mqttPassword[];   // mqtt 패스워드명
+extern char topic[];
+extern IPAddress mqttAddress; // MQTT 브로커의 IP 주소
+extern char publishTopic[];
+extern char subscribeTopic[];
+
 
 // HX711 객체를 전역 선언
 extern HX711 scale;
@@ -26,16 +44,6 @@ extern long sumOfValues;      // 평균 나누기전 값
 extern float weight;           // 계산된 무게
 extern float previous_weight;  // 영점 조절용 이전 무게 변수
 
-// Wi-Fi 정보
-extern char wifi_ssid[];
-extern char wifi_password[];
-
-// MQTT
-extern char mqttClientName[];  // MQTT접속할 클라이언트 이름
-extern char mqttUserName[];    // mqtt유저명
-extern char mqttPassword[];    // mqtt패스워드명
-extern char publishTopic[];
-extern char subscribeTopic[];
 
 // 기타 변수
 extern int weightCount;

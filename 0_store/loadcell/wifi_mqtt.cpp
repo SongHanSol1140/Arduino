@@ -1,7 +1,6 @@
 #include "wifi_mqtt.h"
 #include "weightCheck.h"
 #include "variables.h"
-IPAddress address(192, 168, 0, 8);
 WiFiClient net;
 MQTTClient client(1024, 1024);
 
@@ -30,7 +29,7 @@ void setWifi() {
 
 void setMqtt() {
   if (!client.connected()) {
-    client.begin(address, net);
+    client.begin(mqttAddress, net);
     while (!client.connect(mqttClientName, mqttUserName, mqttPassword)) {
       // while (!client.connect(mqttClientName)) {
       Serial.println("MQTT connecting...");
