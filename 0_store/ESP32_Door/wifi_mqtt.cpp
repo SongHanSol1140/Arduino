@@ -87,7 +87,7 @@ void messageReceived(String &topicName, String &payload) {
   // 문 개방 명령
   if (first == "Open") {
     Serial.println("OpenDoor command received");
-    playWavNonBlocking("dingdong.wav");  // max98357
-    OpenDoor();                          // OpenDoor 함수 호출하여 문 개방
+    // playWavNonBlocking("dingdong.wav");  // max98357
+    OpenDoor(); // OpenDoor 함수 호출하여 문 개방
   }
 }

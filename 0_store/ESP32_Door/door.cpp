@@ -5,7 +5,7 @@
 
 void setOpenTime() {
   Serial.println("GetDoorTimeConfig");
-  mqttClient.publish(serverTopic, "getDoorTimeConfig");
+  mqttClient.publish(serverTopic, "GetDoorTimeConfig");
 }
 
 void OpenDoor() {
@@ -35,7 +35,7 @@ void checkEmergencyButton() {
     mqttClient.publish(serverTopic, "PressEmergencyButton");
   }
 
-  // 이전 상태 업데이트
+  // 버튼 상태 추적
   prevEmergencyButtonState = currState;
   
   // 디바운싱
