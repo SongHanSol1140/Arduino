@@ -1,3 +1,27 @@
+/*
+    Hans Robot Gripper 이슈
+
+    => 나노닉스에서 별도로 모터를 이용해 만든 그리퍼임
+
+    모터가 동작을 안하는 문제 (MQTT를 ESP32가 분명히 받지만 동작을 안했었음)					
+        => 배선을 잘못함				
+        => 코드에서 '2'핀은 D2가 아님, 2번핀을 D2로 설정해놔서 그리퍼가 동작하지 않았던것		
+
+    USB 사용안할시 작동을 안하는문제(ESP32C3이 부팅이 안되는 경우)					
+        => 상민 씨 코드에서 while(!Serial)부분이 문제였음				
+        => Serial은 USB가 연결되어 시리얼인터페이스가 활성화되어야 리턴됨				
+    모터 현재위치 확인					
+        Serial.println(driver.XACTUAL());				
+        driver.XACTUAL() => 모터 현재 포지션값 확인				
+        우리가 position 20000으로 보낼시 도착후 측정해보면 20000이 나옴				
+					
+    이외 각종에러 출력방법 driver.DRV_STATUS()					
+        driver.DRV_STATUS()를 사용하면 될거라고 판단되는데				
+        0101010101111010101011와 같이 비트로 데이터가 들어오기 때문에 추후 tmc5160 메뉴얼을 찾아서 확인해볼것			
+*/
+
+
+
 #include <TMCStepper.h>
 #include <WiFi.h>
 #include <MQTT.h>
@@ -6,7 +30,6 @@
 
 
 
-//////////////////////////////////////////////S
 #define EN_PIN 3    // Enable D3
 #define CS_PIN 2    // Chip select D2
 #define SW_MOSI 10  // Software Master Out Slave In (MOSI) D10
